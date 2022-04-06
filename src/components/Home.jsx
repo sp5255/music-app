@@ -1,7 +1,7 @@
 import SideNav from "./SideNav";
 import TopNav from "./TopNav";
 import Player from "./Player";
-import SongsContainer from "./SongsContainer";
+import SongsContainer from "./AlbumsContainer";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
