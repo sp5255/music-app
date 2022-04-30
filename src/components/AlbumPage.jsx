@@ -45,6 +45,7 @@ const AlbumPage = () => {
     },[params?.id]);
 
     // console.log(albumImages[0].url);y
+    console.log('set songs',songs);
     return (        
         <>
             <Toolbar />

@@ -6,23 +6,15 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_PLAY_NOW } from "../actions";
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
+const SongTable = ({ songList }) => {
+    const dispatch = useDispatch();
+    const store = useSelector((store) => store);
 
-const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
-const SongTable = ({songList}) => {
-
-    console.log(songList)
-
+    console.log("store", store);
+    console.log("songlist", songList);
     return (
         <TableContainer component={Paper} sx={{ background: "initial" }}>
             <Table
@@ -42,7 +34,7 @@ const SongTable = ({songList}) => {
                         <TableCell>S.No.</TableCell>
                         <TableCell>Title</TableCell>
                         <TableCell align="right">Artists</TableCell>
-                        <TableCell align="right">Duration</TableCell>                        
+                        <TableCell align="right">Duration</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -62,9 +54,22 @@ const SongTable = ({songList}) => {
                         >
                             <TableCell>{ind + 1}</TableCell>
                             <TableCell>{song.name}</TableCell>
-                            <TableCell align="right">{song.artistName}</TableCell>
+                            <TableCell align="right">
+                                {song.artistName}
+                            </TableCell>
+                            <TableCell align="right">
+                                <button
+                                    style={{ background: "black" }}
+                                    onClick={() => {
+                                        console.log(song);
+                                        dispatch(SET_PLAY_NOW(song));
+                                    }}
+                                >
+                                    Play
+                                </button>
+                            </TableCell>
                             {/* <TableCell align="right">{row.calories}</TableCell> */}
-                            {/* <TableCell align="right">{row.fat}</TableCell>
+                            {/* <TableCell align="right">{row.fat}</TableCell> 
                             <TableCell align="right">{row.carbs}</TableCell>
                             <TableCell align="right">{row.protein}</TableCell> */}
                         </TableRow>

@@ -7,6 +7,7 @@ import Player from "./components/Player";
 import { Route, Routes } from "react-router-dom";
 import SongTable from "./components/SongTable";
 import AlbumPage from "./components/AlbumPage";
+import SearchResult from "./components/SearchResult";
 
 function App() {
     const [newReleases, setNewRelease] = useState([]);
@@ -19,18 +20,21 @@ function App() {
             const result = await resp.json();
             setNewRelease(result.albums);
         })();
-    },[]);
+    }, []);
 
     return (
         <>
             <TopNav />
             <SideNav />
-            <Player />            
+            <Player />
             <Routes>
-                
-                <Route path="/" element = {<AlbumsContainer albums={newReleases} />} />
-                <Route path="/albums/:id" element = {<AlbumPage />} />
-            </Routes>            
+                <Route
+                    path="/"
+                    element={<AlbumsContainer albums={newReleases} />}
+                />
+                <Route path="/albums/:id" element={<AlbumPage />} />
+                <Route path="/search/:query" element={<SearchResult />} />
+            </Routes>
         </>
     );
 }

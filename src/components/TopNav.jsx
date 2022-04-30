@@ -1,4 +1,5 @@
-import * as React from "react";
+import React,{useState} from "react";
+import { useNavigate } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -8,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import { API_KEY, BASE_URL } from "../contants";
 
 const Search = styled("div")(({ theme }) => ({
     position: "relative",
@@ -52,6 +54,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const TopNav = () => { 
+    const [searchValue, setSearchValue] = useState("");
+    const navigate = useNavigate();
+
+    const handleSearch = async(e) => {    
+        if(e.keyCode === 13){
+            navigate(`/search/${searchValue}`)
+        }                  
+    }   
+    
     return (
         
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -83,6 +94,9 @@ const TopNav = () => {
                         <StyledInputBase
                             placeholder="Search…"
                             inputProps={{ "aria-label": "search" }}
+                            onChange = {(e) => setSearchValue(e.target.value)}
+                            onKeyDown = {handleSearch}
+                            value =  {searchValue}
                         />
                     </Search>
                 </Toolbar>

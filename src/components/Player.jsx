@@ -7,6 +7,8 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import PauseIcon from "@mui/icons-material/Pause";
+import { useSelector } from "react-redux";
+import { API_KEY, BASE_URL } from "../contants";
 
 const Player = () => {
     const [volume, setVolume] = useState(20);
@@ -14,10 +16,13 @@ const Player = () => {
     const [currentTime, setCurrentTime] = useState(0);
 
     const audioPlayer = useRef(null);
-    const audio_url =
-        "https://p.scdn.co/mp3-preview/6dbabf5a9743b9368e23a64738334d3cb183ddd8?cid=428a260d07be407b8cf07f7802198ce2";
+    const currentSong = useSelector((store) => store.playingNow)
+    const audio_url = currentSong?.previewURL;
+    const [imageUrl, setImageUrl] = useState("");
+    // const audio_url = 
+    //     "https://p.scdn.co/mp3-preview/6dbabf5a9743b9368e23a64738334d3cb183ddd8?cid=428a260d07be407b8cf07f7802198ce2";
 
-    useEffect(() => {}, []);
+    
 
     // whenever there is a change in volume in audio player,
     // change volume slider also
@@ -39,6 +44,15 @@ const Player = () => {
         });
     };
 
+    useEffect(() => {        
+        if(currentSong !== ''){
+            setPlayingStatus(true);
+            audioPlayer.current.play();
+
+        }
+
+    }, [currentSong]);
+
     // when audio is ended , stop playing --> set the state to false
     const stopPlaying = () => {
         setPlayingStatus(false);
@@ -48,6 +62,15 @@ const Player = () => {
     const updatePlayerTime = (e) => {
         setCurrentTime(e.target.currentTime);
     };
+
+    useEffect(() => {
+        (async () => {
+            const image_base_url = `${BASE_URL}/v2.2/albums/${currentSong.albumId}/images`;
+            const resp = await fetch(`${image_base_url}?apikey=${API_KEY}`);
+            const { images } = await resp.json();
+            setImageUrl(images[1].url);
+        })();
+    }, [currentSong]);
 
     // useEffect (() => {
     //     audioPlayer.current.currentTime = currentTime;
@@ -77,7 +100,9 @@ const Player = () => {
                     sx={{ px: 2 }}
                     alignItems="center"
                 >
-                    <Stack>image</Stack>
+                    <Stack>
+                        <img src={imageUrl} alt = {currentSong.name} />
+                    </Stack>
 
                     <Stack
                         sx={{ ml: 20, mb: 2 }}
