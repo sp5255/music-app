@@ -56,7 +56,7 @@ const AlbumPage = () => {
                     p: 0,
                     ml: 30,
                     mb: 10,
-                    background: "rgb(32, 152, 208)",
+                    // background: "rgb(32, 152, 208)",
                 }}
             >
                 <Box
@@ -68,8 +68,8 @@ const AlbumPage = () => {
                         p: 3,
                         pb: 2,
 
-                        background:
-                            "linear-gradient(transparent 0,rgba(0,0,0,.5) 100%)",
+                        // background:
+                        //     "linear-gradient(transparent 0,rgba(0,0,0,.5) 100%)",
                     }}
                     alignItems="flex-end"
                 >
@@ -83,7 +83,7 @@ const AlbumPage = () => {
                             alt="green iguana"
                         />
                     </Paper>
-                    <Stack sx={{ pl: 2 , color:"white"}}>
+                    <Stack sx={{ pl: 2 /* , color:"white" */}}>
                         <Typography variant="h5" sx ={{mb:0, fontWeight: "bold"}}>Playlist</Typography>
                         <Typography variant="h4" sx = {{fontWeight: "bold"}}>{album?.name}</Typography>
                         <Typography sx = {{ mb: 2, }}>{album?.artistName} </Typography>
@@ -91,13 +91,13 @@ const AlbumPage = () => {
                     </Stack>
                 </Box>
                 <Box
-                    sx={{
+                    /* sx={{
                         background:
                             "linear-gradient(rgba(0,0,0,.6) 0,#121212 100%)",
                         p: 3,
-                    }}
+                    }} */
                 >
-                    <Box>Icons</Box>
+                    {/* <Box>Icons</Box> */}
                         <SongTable songList = {songs}/>
                 </Box>
             </Box>

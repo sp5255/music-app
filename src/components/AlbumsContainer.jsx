@@ -2,13 +2,13 @@ import AlbumCard from "./AlbumCard";
 import { Grid, Box, Toolbar } from "@mui/material";
 
 const AlbumsContainer = (props) => {
-    const { albums } = props;
+    const { albums, search } = props;
     console.log(albums);
 
     return (
         <>
-            <Toolbar />
-            <Box component="main" sx={{ flexGrow: 1, p: 3, ml: 30, mb: 10 }}>
+            {!search && <Toolbar />}
+            <Box component="main" sx={{ flexGrow: 1, p: 3, ml: search ? "initial" :  30, mb: 10 }}>
                 <Grid
                     container
                     rowSpacing={4}

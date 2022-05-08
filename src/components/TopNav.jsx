@@ -58,8 +58,9 @@ const TopNav = () => {
     const navigate = useNavigate();
 
     const handleSearch = async(e) => {    
-        if(e.keyCode === 13){
+        if(e.keyCode === 13){            
             navigate(`/search/${searchValue}`)
+            setSearchValue("");
         }                  
     }   
     

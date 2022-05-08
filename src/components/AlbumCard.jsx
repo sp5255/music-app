@@ -32,7 +32,7 @@ const AlbumCard = (props) => {
             lg={2}
             onClick={() => navigate(`/albums/${id}`)}
         >
-            <Card sx={{ background: "red", maxWidth: 200 }}>
+            <Card sx={{  maxWidth: 200 }}>
                 <CardActionArea>
                     <Paper elevation={3} sx={{ maxWidth: 200 }}>
                         <Stack spacing={2} sx={{ padding: 2, pt: 1 }}>
