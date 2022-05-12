@@ -46,7 +46,7 @@ const BasicTabs = ({one, two,three})  =>{
   };
 
   return (
-    <Box sx={{ width: '100%', ml:30, }}>
+    <Box  sx={{ width: '100%',/*  background:"lightblue" */}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Songs" {...a11yProps(0)} />

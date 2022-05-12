@@ -1,9 +1,11 @@
-import { Typography, Grid, TableCell, Container } from "@mui/material";
+import { Typography, Grid, TableCell, Container, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_KEY, BASE_URL } from "../contants";
 import AlbumCard from "./AlbumCard";
 import AlbumsContainer from "./AlbumsContainer";
+import ArtistCard from "./ArtistCard";
+import ArtistPage from "./ArtistPage";
 import SongTable from "./SongTable";
 import BasicTabs from "./Tabs";
 
@@ -26,16 +28,17 @@ const SearchResult = () => {
 
     console.log(data);
     return (
-        <Container  sx = {{ mt:10 }}>      
+        <Box  sx = {{ mt:10, pl:  "15rem !important" }}>      
 
         <BasicTabs
         one = {data?.tracks && < SongTable songList={data?.tracks} />} 
         two = {data?.albums && <AlbumsContainer albums = {data?.albums} search/>}
+        three = {data?.artists && <ArtistPage artists = {data?.artists} /> } 
          />
                    
-            {/* {data?.albums && <AlbumsContainer albums = {data?.albums} /> } */}
+                {/* {data?.albums && <AlbumsContainer albums = {data?.albums} /> } */}
                                     
-        </Container> 
+        </Box> 
     );
 };
 
