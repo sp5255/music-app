@@ -1,6 +1,13 @@
 import { React, useEffect, useRef, useState } from "react";
 import SongProgressBar from "./SongProgressBar";
-import { IconButton, Slider, Stack, Paper, Fab } from "@mui/material";
+import {
+  IconButton,
+  Slider,
+  Stack,
+  Paper,
+  Fab,
+  Typography,
+} from "@mui/material";
 import { VolumeDown, VolumeUp } from "@mui/icons-material";
 
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
@@ -60,18 +67,23 @@ const Player = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      const image_base_url = `${BASE_URL}/v2.2/albums/${currentSong.albumId}/images`;
-      const resp = await fetch(`${image_base_url}?apikey=${API_KEY}`);
-      const { images } = await resp.json();
-      setImageUrl(images[1].url);
-    })();
+    if (!currentSong) return;
+    try {
+      (async () => {
+        const image_base_url = `${BASE_URL}/v2.2/albums/${currentSong.albumId}/images`;
+        const resp = await fetch(`${image_base_url}?apikey=${API_KEY}`);
+        const { images } = await resp.json();
+        setImageUrl(images[1].url);
+      })();
+    } catch (e) {
+      console.log(e);
+    }
   }, [currentSong]);
 
   // useEffect (() => {
   //     audioPlayer.current.currentTime = currentTime;
   // }, [currentTime])
-
+  // console.log('time', currentTime)
   return (
     <>
       <Paper
@@ -97,7 +109,7 @@ const Player = () => {
           alignItems="center"
         >
           <Stack width="5rem">
-            <img src={imageUrl} alt={currentSong.name} />
+            <img src={imageUrl} alt={currentSong?.name?.slice(0, 10)} />
           </Stack>
 
           <Stack
@@ -126,12 +138,18 @@ const Player = () => {
                 <SkipNextIcon fontSize="large" />
               </IconButton>
             </Stack>
-            <Stack>
+            <Stack direction="row" alignItems="center">
               <SongProgressBar
                 time={currentTime}
                 setTime={setCurrentTime}
-                audioRef={audioPlayer}
+                audioRef={audioPlayer} // skip to the duration where we click
               />
+              <Typography varaint="caption" sx={{ ml: 1, fontSize: "0.78rem" }}>
+                00:
+                {parseInt(currentTime) < 10
+                  ? `0${parseInt(currentTime)}`
+                  : parseInt(currentTime)}
+              </Typography>
             </Stack>
           </Stack>
 

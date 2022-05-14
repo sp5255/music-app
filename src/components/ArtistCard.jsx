@@ -1,31 +1,55 @@
 import { Avatar, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { API_KEY } from "../contants";
 
-const ArtistCard = ({artist}) => {
-    const link = artist?.links;
-    const name = artist?.name;
-    const [imageSrc, setImageSrc] = useState();
-    console.log(link)
+const ArtistCard = ({ artist }) => {
+  const href = artist?.href;
+  const name = artist?.name;
+  const [imageSrc, setImageSrc] = useState();
+  const navigate = useNavigate();
+  console.log(artist);
 
-    useEffect(() => {
-        (async() =>{
-            // const res = await fetch(`${link?.images?.href}?apikey=${API_KEY}`)        
-            // console.log('artist img', res)
-        })()
-    })
-
+  useEffect(() => {
+    try {
+      (async () => {
+        const res = await fetch(`${href}/images?apikey=${API_KEY}`);
+        const result = await res.json();
+        setImageSrc(result?.images[0]?.url);
+      })();
+    } catch (e) {
+      console.log(e);
+    }
+  }, [href]);
 
   return (
-    <Paper elevation={3} sx={{ width: "fit-content", p: 2 , maxWidth:167}}>
+    <Paper
+      elevation={3}
+      sx={{
+        width: "fit-content",
+        p: 2,
+        maxWidth: 167,
+        "&:hover": {
+          cursor: "pointer",
+        },
+      }}
+      onClick={() => {
+        navigate(`/artist/${artist?.id}`);
+      }}
+    >
       <Avatar
-        src="http://static.rhap.com/img/170x170/0/9/9/1/30681990_170x170.jpg"
+        alt={name}
+        src={imageSrc}
         sx={{
-          width: 165,
-          height: 170,          
+          width: 160,
+          height: 165,
         }}
-      />
-      <Typography variant="h6" sx = {{maxWidth:"100%"}}>{name}</Typography>
+      >
+        {name.split(" ")[0][0] + " " + name.split(" ")[1][0]}
+      </Avatar>
+      <Typography variant="h6" sx={{ maxWidth: "100%" }}>
+        {name.slice(0, 17)}
+      </Typography>
       <Typography variant="caption">Artist</Typography>
     </Paper>
   );

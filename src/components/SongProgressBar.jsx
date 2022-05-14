@@ -2,6 +2,7 @@ import * as React from "react";
 
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import { Typography } from "@mui/material";
 
 export default function SongProgressBar(props) {
     const changePlayerCurrentTime = (e, newValue) => {
@@ -13,7 +14,7 @@ export default function SongProgressBar(props) {
     };
 
     return (
-        <Box width={500} height={20}>
+        <Box width={500} height={30}>
             <Slider
                 size="small"
                 defaultValue={0}
@@ -22,9 +23,9 @@ export default function SongProgressBar(props) {
                 valueLabelDisplay="auto"
                 sx={{ height: 4 }}
                 min={0}
-                max={30}
+                max={30}    
                 onChange={changePlayerCurrentTime}
-            />
+            />            
         </Box>
     );
 }

@@ -1,84 +1,105 @@
 import { TableCell, TableRow } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { IconButton, Slider, Stack, Paper, Fab } from "@mui/material"
+import { IconButton } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { useDispatch } from "react-redux";
+import PauseIcon from "@mui/icons-material/Pause";
+import { useDispatch, useSelector } from "react-redux";
 import { SET_PLAY_NOW } from "../actions";
 import { API_KEY, BASE_URL } from "../contants";
-import { HdrStrongOutlined } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
-const SongRow = ({ song, ind }) => {
-    const [isHover, setHover] = useState(false);
-    let min = parseInt(song?.playbackSeconds / 60);
-    min = min < 10 ? `0${min}` : min;
-    let sec = parseInt(song?.playbackSeconds % 60);
-    sec = sec < 10 ? `0${sec}` : sec;
+const SongRow = ({ song, ind, album }) => {
+  const [isHover, setHover] = useState(false);
+  let min = parseInt(song?.playbackSeconds / 60);
+  min = min < 10 ? `0${min}` : min;
+  let sec = parseInt(song?.playbackSeconds % 60);
+  sec = sec < 10 ? `0${sec}` : sec;
 
-    const dispatch = useDispatch();
-    const [imageUrl, setImageUrl] = useState("");
-    useEffect(() => {
-        (async () => {
-            const image_base_url = `${BASE_URL}/v2.2/albums/${song.albumId}/images`;
-            const resp = await fetch(`${image_base_url}?apikey=${API_KEY}`);
-            const { images } = await resp.json();
-            setImageUrl(images[1].url);
-        })();
-    }, [song]);
 
-    // console.log("hover", isHover, ind);
+  const dispatch = useDispatch();
+  const currentSong = useSelector((store) => store.playingNow)
+  const [imageUrl, setImageUrl] = useState("");
 
-    return (
-        <>
-            <TableRow
-                key={song.id}
-                hover={true}
-                sx={{
-                    "&:last-child td, &:last-child th": {
-                        border: 0,
-                    },
-                    "&:hover": {
-                        background: "rgb(189 189 189 / 15%) !important",
-                    },
-                }}
-                onMouseEnter={() => {
-                    setHover(true);
-                }}
-                onMouseLeave={() => {
-                    setHover(false);
-                }}
+  useEffect(() => {
+    (async () => {
+      const image_base_url = `${BASE_URL}/v2.2/albums/${song.albumId}/images`;
+      const resp = await fetch(`${image_base_url}?apikey=${API_KEY}`);
+      const { images } = await resp.json();
+      setImageUrl(images[1].url);
+    })();
+  }, [song]);
+
+  // console.log("hover", isHover, ind);
+
+  return (
+    <>
+      <TableRow
+        key={song.id}
+        hover={true}
+        sx={{
+          "&:last-child td, &:last-child th": {
+            border: 0,
+          },
+          "&:hover": {
+            background: "rgb(189 189 189 / 15%) !important",
+          },
+        }}
+        onMouseEnter={() => {
+          setHover(true);
+        }}
+        onMouseLeave={() => {
+          setHover(false);
+        }}
+      >
+        <TableCell>
+          {isHover ? (
+            <IconButton
+              color="primary"
+              aria-label="play"
+              size="medium"
+              sx={{
+                margin: -2,
+                background: "#efefef",
+              }}
+              // onClick={togglePlayerStatus}
+
+              onClick={() => dispatch(SET_PLAY_NOW(song))}
             >
-                <TableCell>
-                    {isHover ? (
-                        <IconButton
-                            color="primary"
-                            aria-label="play"
-                            size="medium"
-                            sx = {{margin:-2, background:"grey", "&:hover" :{
-                                background:"grey"
-                            } }}
-                            // onClick={togglePlayerStatus}
-
-                            onClick = {() => dispatch(SET_PLAY_NOW(song))}
-
-                        >
-                            {/* {isPlaying ? (
+              {/* {isPlaying ? (
                                 <PauseIcon fontSize="medium" />
                             ) : ( */}
-                                <PlayArrowIcon fontSize="inherit"  />
-                            {/* )} */}
-                        </IconButton>
-                    ) : (
-                        ind + 1
-                    )}
-                </TableCell>
-                <TableCell >
-                    <img src ={imageUrl} alt = "song" width="38" style={{borderRadius:".2rem"}}/>
-                </TableCell>
-                <TableCell>{song.name}</TableCell>
-                <TableCell align="right">{song.artistName}</TableCell>
-                <TableCell align="right">{song.albumName}</TableCell>
-                <TableCell align="right">
-                    {/*   <button
+              <PlayArrowIcon fontSize="inherit" />
+              {/* )} */}
+            </IconButton>
+          ) : (
+            ind + 1
+          )}
+        </TableCell>
+        <TableCell>
+          <img
+            src={imageUrl}
+            alt="song"
+            width="38"
+            style={{ borderRadius: ".2rem" }}
+          />
+        </TableCell>
+        <TableCell>{song.name}</TableCell>
+        <TableCell align="right">
+          {album ? (
+            <Link to={`/artist/${song?.artistId}`}>{song.artistName}</Link>
+          ) : (
+            song.artistName
+          )}
+        </TableCell>
+        <TableCell align="right">
+          {!album ? (
+            <Link to={`/albums/${song?.albumId}`}>{song.albumName}</Link>
+          ) : (
+            song.albumName
+          )}
+        </TableCell>
+        <TableCell align="right">
+          {/*   <button
                                     style={{ background: "black" }}
                                     onClick={() => {
                                         console.log(song);
@@ -87,15 +108,15 @@ const SongRow = ({ song, ind }) => {
                                 >
                                     Play
                                 </button> */}
-                    {min} : {sec}
-                </TableCell>
-                {/* <TableCell align="right">{row.calories}</TableCell> */}
-                {/* <TableCell align="right">{row.fat}</TableCell> 
+          {min} : {sec}
+        </TableCell>
+        {/* <TableCell align="right">{row.calories}</TableCell> */}
+        {/* <TableCell align="right">{row.fat}</TableCell> 
                             <TableCell align="right">{row.carbs}</TableCell>
                             <TableCell align="right">{row.protein}</TableCell> */}
-            </TableRow>
-        </>
-    );
+      </TableRow>
+    </>
+  );
 };
 
 export default SongRow;

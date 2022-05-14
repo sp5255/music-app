@@ -1,9 +1,9 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import * as React from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -34,11 +34,11 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
-const BasicTabs = ({one, two,three})  =>{
+const BasicTabs = ({ one, two, three }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -46,9 +46,13 @@ const BasicTabs = ({one, two,three})  =>{
   };
 
   return (
-    <Box  sx={{ width: '100%',/*  background:"lightblue" */}}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+    <Box sx={{ width: "100%" /*  background:"lightblue" */ }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
           <Tab label="Songs" {...a11yProps(0)} />
           <Tab label="Albums" {...a11yProps(1)} />
           <Tab label="Artists" {...a11yProps(2)} />
@@ -65,6 +69,6 @@ const BasicTabs = ({one, two,three})  =>{
       </TabPanel>
     </Box>
   );
-}
+};
 
 export default BasicTabs;
