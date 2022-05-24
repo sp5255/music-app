@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import { CardMedia, Paper, Stack, Toolbar, Typography } from "@mui/material";
+import {
+  CardMedia,
+  Divider,
+  Paper,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import SongTable from "./SongTable";
 import { useParams } from "react-router-dom";
@@ -52,7 +59,7 @@ const ArtistPage = () => {
             flexGrow: 1,
             p: 0,
             ml: 30,
-            mb: 10,            
+            mb: 10,
           }}
         >
           <Box
@@ -82,6 +89,7 @@ const ArtistPage = () => {
               </Typography>
             </Stack>
           </Box>
+          <Divider />
           <Box>{songs && <SongTable songList={songs} />}</Box>
         </Box>
       </>

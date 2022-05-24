@@ -11,7 +11,7 @@ const SongTable = ({ songList, album = false }) => {
   const dispatch = useDispatch();
   const store = useSelector((store) => store);
 
-    console.log("store", store);
+    // console.log("store", store);
   //   console.log("songlist", songList);
   return (
     <TableContainer component={Paper} sx={{ mb: 10 }}>

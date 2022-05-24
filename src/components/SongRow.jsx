@@ -15,10 +15,10 @@ const SongRow = ({ song, ind, album }) => {
   let sec = parseInt(song?.playbackSeconds % 60);
   sec = sec < 10 ? `0${sec}` : sec;
 
-
   const dispatch = useDispatch();
-  const currentSong = useSelector((store) => store.playingNow)
+  const currentSong = useSelector((store) => store.playingNow);
   const [imageUrl, setImageUrl] = useState("");
+  const [rowSongPlaying, setRowSong] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -29,20 +29,26 @@ const SongRow = ({ song, ind, album }) => {
     })();
   }, [song]);
 
-  // console.log("hover", isHover, ind);
+  useEffect(() => {
+    setRowSong(currentSong.id === song.id);
+  }, [currentSong, song]);
+  // console.log("hover", isHover, ind);-
 
   return (
     <>
       <TableRow
         key={song.id}
-        hover={true}
+        hover={!rowSongPlaying}
         sx={{
           "&:last-child td, &:last-child th": {
             border: 0,
           },
           "&:hover": {
-            background: "rgb(189 189 189 / 15%) !important",
+            background: !rowSongPlaying ?  "rgb(189 189 189 / 15%) !important" : null,
+            cursor:"pointer"
           },
+
+          background:rowSongPlaying ? "#1976d224" : "initial"
         }}
         onMouseEnter={() => {
           setHover(true);
@@ -52,7 +58,7 @@ const SongRow = ({ song, ind, album }) => {
         }}
       >
         <TableCell>
-          {isHover ? (
+          {isHover && !rowSongPlaying ? (
             <IconButton
               color="primary"
               aria-label="play"
@@ -65,11 +71,7 @@ const SongRow = ({ song, ind, album }) => {
 
               onClick={() => dispatch(SET_PLAY_NOW(song))}
             >
-              {/* {isPlaying ? (
-                                <PauseIcon fontSize="medium" />
-                            ) : ( */}
               <PlayArrowIcon fontSize="inherit" />
-              {/* )} */}
             </IconButton>
           ) : (
             ind + 1
@@ -110,10 +112,6 @@ const SongRow = ({ song, ind, album }) => {
                                 </button> */}
           {min} : {sec}
         </TableCell>
-        {/* <TableCell align="right">{row.calories}</TableCell> */}
-        {/* <TableCell align="right">{row.fat}</TableCell> 
-                            <TableCell align="right">{row.carbs}</TableCell>
-                            <TableCell align="right">{row.protein}</TableCell> */}
       </TableRow>
     </>
   );

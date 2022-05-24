@@ -1,4 +1,4 @@
-import { React, useEffect, useRef, useState } from "react";
+import { React, useEffect, useMemo, useRef, useState } from "react";
 import SongProgressBar from "./SongProgressBar";
 import {
   IconButton,
@@ -11,21 +11,25 @@ import {
 import { VolumeDown, VolumeUp } from "@mui/icons-material";
 
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { API_KEY, BASE_URL } from "../contants";
+import { CHANGE_SONG_NUMBER, IS_PLAYING } from "../actions";
 
 const Player = () => {
   const [volume, setVolume] = useState(20);
   const [isPlaying, setPlayingStatus] = useState(false);
+  // const isPlaying = useSelector((store) => store.isPlaying);
   const [currentTime, setCurrentTime] = useState(0);
 
   const audioPlayer = useRef(null);
   const currentSong = useSelector((store) => store.playingNow);
+  const songNumber = useSelector((store) => store.queueSongNumber);
   const audio_url = currentSong?.previewURL;
   const [imageUrl, setImageUrl] = useState("");
+  const dispatch = useDispatch();
   // const audio_url =
   //     "https://p.scdn.co/mp3-preview/6dbabf5a9743b9368e23a64738334d3cb183ddd8?cid=428a260d07be407b8cf07f7802198ce2";
 
@@ -47,18 +51,31 @@ const Player = () => {
       else audioPlayer.current.pause();
       return !currentStatus;
     });
+
+    // if (!isPlaying) {
+    //   audioPlayer.current.play();
+    //   dispatch(IS_PLAYING(true));
+    // } else {
+    //   audioPlayer.current.pause();
+    //   dispatch(IS_PLAYING(false));
+    // }
   };
 
+  // when current song will change from some other component ,
+  // song will automatically starts palying on playing from there
   useEffect(() => {
     if (currentSong !== "") {
       setPlayingStatus(true);
       audioPlayer.current.play();
+      // dispatch(IS_PLAYING(true));
     }
   }, [currentSong]);
 
   // when audio is ended , stop playing --> set the state to false
   const stopPlaying = () => {
+    dispatch(CHANGE_SONG_NUMBER(songNumber + 1));
     setPlayingStatus(false);
+    // dispatch(IS_PLAYING(false));
   };
 
   // change the slider position A.T. audio player time
@@ -84,6 +101,7 @@ const Player = () => {
   //     audioPlayer.current.currentTime = currentTime;
   // }, [currentTime])
   // console.log('time', currentTime)
+  // console.log('current song', currentSong)
   return (
     <>
       <Paper
@@ -108,17 +126,24 @@ const Player = () => {
           sx={{ px: 2 }}
           alignItems="center"
         >
-          <Stack width="5rem">
-            <img src={imageUrl} alt={currentSong?.name?.slice(0, 10)} />
+          <Stack width="15rem" direction="row" alignItems="center">
+            <img
+              src={imageUrl}
+              alt={currentSong?.name?.slice(0, 10)}
+              style={{ maxWidth: "6rem" }}
+            />
+            <Typography variant="body1" sx={{ ml: 2 }}>
+              {" "}
+              {currentSong?.name}{" "}
+            </Typography>
           </Stack>
 
-          <Stack
-            sx={{ ml: 20, mb: 2 }}
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Stack sx={{ mb: 2 }} justifyContent="center" alignItems="center">
             <Stack direction="row" alignItems="center">
-              <IconButton aria-label="prev">
+              <IconButton
+                aria-label="prev"
+                onClick={() => dispatch(CHANGE_SONG_NUMBER(songNumber - 1))}
+              >
                 <SkipPreviousIcon fontSize="large" />
               </IconButton>
 
@@ -134,7 +159,10 @@ const Player = () => {
                   <PlayArrowIcon fontSize="medium" />
                 )}
               </Fab>
-              <IconButton aria-label="next">
+              <IconButton
+                aria-label="next"
+                onClick={() => dispatch(CHANGE_SONG_NUMBER(songNumber + 1))}
+              >
                 <SkipNextIcon fontSize="large" />
               </IconButton>
             </Stack>

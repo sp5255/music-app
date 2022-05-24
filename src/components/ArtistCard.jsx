@@ -48,7 +48,7 @@ const ArtistCard = ({ artist }) => {
         {name.split(" ")[0][0] + " " + name.split(" ")[1][0]}
       </Avatar>
       <Typography variant="h6" sx={{ maxWidth: "100%" }}>
-        {name.slice(0, 17)}
+        {name.slice(0, 15)}
       </Typography>
       <Typography variant="caption">Artist</Typography>
     </Paper>

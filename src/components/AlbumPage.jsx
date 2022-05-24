@@ -1,15 +1,34 @@
-import { CardMedia, Paper, Stack, Toolbar, Typography } from "@mui/material";
+import {
+  Fab,
+  CardMedia,
+  Divider,
+  Paper,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { API_KEY, BASE_URL } from "../contants";
 import SongTable from "./SongTable";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { useDispatch, useSelector } from "react-redux";
+import { IS_PLAYING, PLAYING_QUEUE } from "../actions";
 
 const AlbumPage = () => {
   const params = useParams();
+  const currentSong = useSelector((store) => store.playingNow);
   const [songs, setSongs] = useState([]);
   const [album, setAlbum] = useState();
   const [albumImages, setAlbumImages] = useState([]);
+  const isPlaying = useSelector((store) => store.isPlaying);
+  const [playerIcon, setPlayerIcon] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     try {
@@ -53,6 +72,18 @@ const AlbumPage = () => {
       console.log(e);
     }
   }, [params?.id]);
+
+  // change  icon above the table
+  useEffect(() => {
+    songs.forEach((song, ind) => {
+      if (song.id === currentSong.id /* && isPlaying */) {
+        setPlayerIcon(true);
+        return;
+      }
+
+      // setPlayerIcon(false);
+    });
+  }, [currentSong, songs]);
 
   //   console.log("set songs", songs);
   return (
@@ -108,7 +139,36 @@ const AlbumPage = () => {
                         p: 3,
                     }} */
         >
-          <SongTable songList={songs} album />
+          <Stack direction="row" alignItems="center" sx={{ py: 4, pl: 2 }}>
+            <Fab
+              color="primary"
+              aria-label="play"
+              size="large "
+              sx={{
+                marginRight: "1rem",
+              }}
+              // onClick={togglePlayerStatus}
+              onClick={() => {
+                dispatch(PLAYING_QUEUE(songs));
+                setPlayerIcon(true);
+              }}
+            >
+              {playerIcon ? (
+                <PauseIcon fontSize="medium" />
+              ) : (
+                <PlayArrowIcon sx={{ fontSize: "2rem" }} />
+              )}
+            </Fab>
+
+            <FavoriteBorderIcon
+              sx={{ fontSize: "3rem", marginRight: "1rem" }}
+            />
+            <MoreHorizIcon sx={{ fontSize: "3rem" }} />
+          </Stack>
+          <Divider sx={{ ml: 2, mb: 2 }} />
+          <Box sx={{ pl: 2 }}>
+            <SongTable songList={songs} album />
+          </Box>
         </Box>
       </Box>
     </>
